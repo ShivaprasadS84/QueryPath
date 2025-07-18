@@ -4,12 +4,32 @@ from dateutil.relativedelta import relativedelta
 def get_current_date():
     """
     Returns the current date in DD-MM-YYYY format.
+    
+    Returns:
+        str: Current date in DD-MM-YYYY format (e.g., "18-07-2025")
+    
+    Usage:
+        - "What is today's date?"
+        - "Current date"
     """
     return datetime.date.today().strftime("%d-%m-%Y")
 
 def get_date_with_offset(offset: int, unit: str, base_date_str: str = None):
     """
     Calculates a new date by applying an offset to a given date or the current date.
+    
+    Args:
+        offset (int): Number of units to add/subtract (positive for future, negative for past)
+        unit (str): Time unit - 'days', 'weeks', 'months', or 'years'
+        base_date_str (str, optional): Base date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        str: Calculated date in DD-MM-YYYY format or error message
+    
+    Usage:
+        - "Date 5 days from now" -> get_date_with_offset(5, 'days')
+        - "Date 3 weeks ago" -> get_date_with_offset(-3, 'weeks')
+        - "Date 6 months after 01-01-2025" -> get_date_with_offset(6, 'months', '01-01-2025')
     """
     try:
         base_date = datetime.datetime.strptime(base_date_str, "%d-%m-%Y").date() if base_date_str else datetime.date.today()
@@ -25,18 +45,39 @@ def get_date_with_offset(offset: int, unit: str, base_date_str: str = None):
 
 def get_day_of_week(date_str: str = None):
     """
-    Returns the day of the week for a given date (e.g., 'Monday').
-    If no date is provided, it uses the current date.
+    Returns the day of the week for a given date or the current date.
+    
+    Args:
+        date_str (str, optional): Date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        str: Day of the week (e.g., "Monday", "Tuesday") or error message
+    
+    Usage:
+        - "What day is today?" -> get_day_of_week()
+        - "What day is 25-12-2025?" -> get_day_of_week('25-12-2025')
     """
     try:
         target_date = datetime.datetime.strptime(date_str, "%d-%m-%Y").date() if date_str else datetime.date.today()
         return target_date.strftime('%A')
     except ValueError:
-        return "Invalid date format. Please use YYYY-MM-DD."
+        return "Invalid date format. Please use DD-MM-YYYY."
 
 def get_date_of_weekday(weekday_name: str, direction: str, base_date_str: str = None):
     """
-    Finds the date of the next or last specified weekday from a given date.
+    Finds the date of the next or last occurrence of a specific weekday.
+    
+    Args:
+        weekday_name (str): Name of the weekday ('Monday', 'Tuesday', etc.)
+        direction (str): 'next' for future occurrence, 'last' for past occurrence
+        base_date_str (str, optional): Base date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        str: Date of the weekday in DD-MM-YYYY format or error message
+    
+    Usage:
+        - "When is next Monday?" -> get_date_of_weekday('Monday', 'next')
+        - "When was last Friday?" -> get_date_of_weekday('Friday', 'last')
     """
     days_of_week = [d.lower() for d in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']]
     weekday_name = weekday_name.lower()
@@ -66,14 +107,26 @@ def get_date_of_weekday(weekday_name: str, direction: str, base_date_str: str = 
     
     return new_date.strftime("%d-%m-%Y")
 
-def get_start_of_period(period: str, date_str: str = None):
+def get_start_of_period(period: str, base_date_str: str = None):
     """
-    Gets the first day of the week, month, or year for a given date.
+    Returns the start date of a period (week, month, or year).
+    
+    Args:
+        period (str): Period type - 'week', 'month', or 'year'
+        base_date_str (str, optional): Base date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        str: Start date of the period in DD-MM-YYYY format or error message
+    
+    Usage:
+        - "Start of this week" -> get_start_of_period('week')
+        - "Start of this month" -> get_start_of_period('month')
+        - "Start of this year" -> get_start_of_period('year')
     """
     try:
-        base_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else datetime.date.today()
+        base_date = datetime.datetime.strptime(base_date_str, "%d-%m-%Y").date() if base_date_str else datetime.date.today()
     except (ValueError, TypeError):
-        return "Invalid date format. Please use YYYY-MM-DD."
+        return "Invalid base_date_str format. Please use DD-MM-YYYY."
 
     if period == 'week':
         start_date = base_date - datetime.timedelta(days=base_date.weekday())
@@ -85,14 +138,26 @@ def get_start_of_period(period: str, date_str: str = None):
         return "Invalid period. Use 'week', 'month', or 'year'."
     return start_date.strftime("%d-%m-%Y")
 
-def get_end_of_period(period: str, date_str: str = None):
+def get_end_of_period(period: str, base_date_str: str = None):
     """
-    Gets the last day of the week, month, or year for a given date.
+    Returns the end date of a period (week, month, or year).
+    
+    Args:
+        period (str): Period type - 'week', 'month', or 'year'
+        base_date_str (str, optional): Base date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        str: End date of the period in DD-MM-YYYY format or error message
+    
+    Usage:
+        - "End of this week" -> get_end_of_period('week')
+        - "End of this month" -> get_end_of_period('month')
+        - "End of this year" -> get_end_of_period('year')
     """
     try:
-        base_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else datetime.date.today()
+        base_date = datetime.datetime.strptime(base_date_str, "%d-%m-%Y").date() if base_date_str else datetime.date.today()
     except (ValueError, TypeError):
-        return "Invalid date format. Please use YYYY-MM-DD."
+        return "Invalid base_date_str format. Please use DD-MM-YYYY."
 
     if period == 'week':
         end_date = base_date + datetime.timedelta(days=6 - base_date.weekday())
@@ -108,7 +173,18 @@ def get_end_of_period(period: str, date_str: str = None):
 def get_date_range_for_week(offset: int = 0):
     """
     Gets the start and end dates for a week, with an offset from the current week.
-    offset=0 is current week, offset=-1 is last week, etc.
+    
+    Args:
+        offset (int): Week offset from current week (0=current, -1=last, 1=next)
+    
+    Returns:
+        dict: Dictionary with 'start_date' and 'end_date' keys in DD-MM-YYYY format
+              Week starts on Monday and ends on Sunday
+    
+    Usage:
+        - "This week's date range" -> get_date_range_for_week(0)
+        - "Last week's date range" -> get_date_range_for_week(-1)
+        - "Next week's date range" -> get_date_range_for_week(1)
     """
     today = datetime.date.today()
     # Calculate the start of the current week (Monday)
@@ -125,7 +201,18 @@ def get_date_range_for_week(offset: int = 0):
 def get_date_range_for_quarter(offset: int = 0):
     """
     Gets the start and end dates for a quarter, with an offset from the current quarter.
-    offset=0 is current quarter, offset=-1 is last quarter, etc.
+    
+    Args:
+        offset (int): Quarter offset from current quarter (0=current, -1=last, 1=next)
+    
+    Returns:
+        dict: Dictionary with 'start_date' and 'end_date' keys in DD-MM-YYYY format
+              Q1: Jan-Mar, Q2: Apr-Jun, Q3: Jul-Sep, Q4: Oct-Dec
+    
+    Usage:
+        - "This quarter's date range" -> get_date_range_for_quarter(0)
+        - "Last quarter's date range" -> get_date_range_for_quarter(-1)
+        - "Next quarter's date range" -> get_date_range_for_quarter(1)
     """
     today = datetime.date.today()
     current_quarter = (today.month - 1) // 3 + 1

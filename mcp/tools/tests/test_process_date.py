@@ -215,7 +215,6 @@ class TestProcessDateAtomic(unittest.TestCase):
         self.assertEqual(result, expected)
 
     @patch('datetimetool.process_date.relativedelta')
-    @patch('datetimetool.process_date.relativedelta')
     @patch('datetimetool.process_date.datetime')
     def test_get_date_range_for_quarter(self, mock_datetime, mock_relativedelta):
         """Test get_date_range_for_quarter function"""

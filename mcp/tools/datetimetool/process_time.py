@@ -3,6 +3,13 @@ import datetime
 def get_current_time():
     """
     Returns the current time in HH:MM:SS format.
+    
+    Returns:
+        str: Current time in HH:MM:SS format (e.g., "14:30:45")
+    
+    Usage:
+        - "What time is it now?"
+        - "Current time"
     """
     return datetime.datetime.now().strftime("%H:%M:%S")
 
@@ -10,6 +17,19 @@ def get_time_with_offset(offset: int, unit: str, base_datetime_str: str = None):
     """
     Calculates a new time by applying an offset to a given datetime or the current datetime.
     Returns only time (HH:MM:SS) if on the same day, or full datetime if on a different day.
+    
+    Args:
+        offset (int): Number of units to add/subtract (positive for future, negative for past)
+        unit (str): Time unit - 'seconds', 'minutes', or 'hours'
+        base_datetime_str (str, optional): Base datetime in DD-MM-YYYY HH:MM:SS format. Uses current time if None.
+    
+    Returns:
+        str: Time in HH:MM:SS format (same day) or DD-MM-YYYY HH:MM:SS format (different day), or error message
+    
+    Usage:
+        - "Time 30 seconds from now" -> get_time_with_offset(30, 'seconds')
+        - "Time 2 hours ago" -> get_time_with_offset(-2, 'hours')
+        - "Time 90 minutes after 01-10-2025 10:00:00" -> get_time_with_offset(90, 'minutes', '01-10-2025 10:00:00')
     """
     try:
         if base_datetime_str:
@@ -36,7 +56,19 @@ def get_time_with_offset(offset: int, unit: str, base_datetime_str: str = None):
 def get_time_range_for_day_part(part_of_day: str, base_date_str: str = None):
     """
     Returns a start and end time for a part of the day (morning, afternoon, evening).
-    Morning: 00:00-11:59, Afternoon: 12:00-17:59, Evening: 18:00-23:59
+    
+    Args:
+        part_of_day (str): Part of day - 'morning', 'afternoon', or 'evening'
+        base_date_str (str, optional): Base date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        dict: Dictionary with 'start_time' and 'end_time' keys in DD-MM-YYYY HH:MM:SS format
+              Morning: 00:00:00-11:59:59, Afternoon: 12:00:00-17:59:59, Evening: 18:00:00-23:59:59
+    
+    Usage:
+        - "Time range for this morning" -> get_time_range_for_day_part('morning')
+        - "Time range for yesterday afternoon" -> get_time_range_for_day_part('afternoon', '17-07-2025')
+        - "Time range for tomorrow evening" -> get_time_range_for_day_part('evening', '19-07-2025')
     """
     try:
         base_date = datetime.datetime.strptime(base_date_str, "%d-%m-%Y").date() if base_date_str else datetime.date.today()
