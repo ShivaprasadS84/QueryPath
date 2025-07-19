@@ -1,98 +1,142 @@
 import datetime
-import re
 
-# --- Constants for Parsing ---
-UNIT_PATTERN = r'(hour|hr|minute|min|second|sec)s?'
-DIRECTION_PATTERN = r'(ago|from now|before|after|next|last|back|in)'
-NUM_PATTERN = r'(a\s+couple\s+of|the|a|\d+)'
+def get_current_time():
+    """
+    Returns the current time in HH:MM:SS format.
+    
+    Returns:
+        str: Current time in HH:MM:SS format (e.g., "14:30:45")
+    
+    Usage:
+        - "What time is it now?"
+        - "Current time"
+    """
+    return datetime.datetime.now().strftime("%H:%M:%S")
 
-# Compiled regex for performance
-REGEX_PATTERNS = [
-    # Pattern 1: "3 hours ago", "a minute from now"
-    re.compile(rf'{NUM_PATTERN}\s*{UNIT_PATTERN}\s*{DIRECTION_PATTERN}', re.IGNORECASE),
-    # Pattern 2: "after 5min", "in 2 seconds"
-    re.compile(rf'{DIRECTION_PATTERN}\s*{NUM_PATTERN}\s*{UNIT_PATTERN}', re.IGNORECASE),
-    # Pattern 3: "10mins ago" (no space)
-    re.compile(rf'(\d+)\s*({UNIT_PATTERN})\s*({DIRECTION_PATTERN})?', re.IGNORECASE)
-]
+def get_time_with_offset(offset: int, unit: str, base_datetime_str: str = None):
+    """
+    Calculates a new time by applying an offset to a given datetime or the current datetime.
+    Returns only time (HH:MM:SS) if on the same day, or full datetime if on a different day.
+    
+    Args:
+        offset (int): Number of units to add/subtract (positive for future, negative for past)
+        unit (str): Time unit - 'seconds', 'minutes', or 'hours'
+        base_datetime_str (str, optional): Base datetime in DD-MM-YYYY HH:MM:SS format. Uses current time if None.
+    
+    Returns:
+        str: Time in HH:MM:SS format (same day) or DD-MM-YYYY HH:MM:SS format (different day), or error message
+    
+    Usage:
+        - "Time 30 seconds from now" -> get_time_with_offset(30, 'seconds')
+        - "Time 2 hours ago" -> get_time_with_offset(-2, 'hours')
+        - "Time 90 minutes after 01-10-2025 10:00:00" -> get_time_with_offset(90, 'minutes', '01-10-2025 10:00:00')
+    """
+    try:
+        if base_datetime_str:
+            base_dt = datetime.datetime.strptime(base_datetime_str, "%d-%m-%Y %H:%M:%S")
+        else:
+            base_dt = datetime.datetime.now()
+    except (ValueError, TypeError):
+        return "Invalid base_datetime_str format. Please use 'DD-MM-YYYY HH:MM:SS'."
 
-# --- Helper Functions ---
-def _is_numeric(s):
-    """Checks if a string can be converted to a digit"""
-    return s.isdigit()
+    if unit not in ['seconds', 'minutes', 'hours']:
+        return f"Invalid unit '{unit}'. Please use 'seconds', 'minutes', or 'hours'."
 
-def _parse_numeric_string(s):
-    """Converts number words to digits"""
-    return s.replace('a couple of', '2').replace('a', '1').replace('the', '1')
+    delta = datetime.timedelta(**{unit: offset})
+    new_dt = base_dt + delta
+    
+    # Check if the new datetime is on the same date as the base datetime
+    if new_dt.date() == base_dt.date():
+        # Same day: return only time
+        return new_dt.strftime("%H:%M:%S")
+    else:
+        # Different day: return full datetime
+        return new_dt.strftime("%d-%m-%Y %H:%M:%S")
 
-# --- Core Parsing Logic ---
-def _parse_time_query(query):
-    """Parses a natural language query to extract time information"""
-    if not isinstance(query, str):
-        return None
-    lq = query.lower()
+def get_time_range_for_day_part(part_of_day: str, base_date_str: str = None):
+    """
+    Returns a start and end time for a part of the day (morning, afternoon, evening).
+    
+    Args:
+        part_of_day (str): Part of day - 'morning', 'afternoon', or 'evening'
+        base_date_str (str, optional): Base date in DD-MM-YYYY format. Uses current date if None.
+    
+    Returns:
+        dict: Dictionary with 'start_time' and 'end_time' keys in DD-MM-YYYY HH:MM:SS format
+              Morning: 00:00:00-11:59:59, Afternoon: 12:00:00-17:59:59, Evening: 18:00:00-23:59:59
+    
+    Usage:
+        - "Time range for this morning" -> get_time_range_for_day_part('morning')
+        - "Time range for yesterday afternoon" -> get_time_range_for_day_part('afternoon', '17-07-2025')
+        - "Time range for tomorrow evening" -> get_time_range_for_day_part('evening', '19-07-2025')
+    """
+    try:
+        base_date = datetime.datetime.strptime(base_date_str, "%d-%m-%Y").date() if base_date_str else datetime.date.today()
+    except (ValueError, TypeError):
+        return "Invalid date format. Please use DD-MM-YYYY."
 
-    for i, pattern in enumerate(REGEX_PATTERNS):
-        match = pattern.search(lq)
-        if not match:
-            continue
+    part_of_day = part_of_day.lower()
+    time_windows = {
+        'morning': ('00:00:00', '11:59:59'),
+        'afternoon': ('12:00:00', '17:59:59'),
+        'evening': ('18:00:00', '23:59:59'),
+    }
 
-        if i < 2:  # Patterns 1 and 2
-            num_str = _parse_numeric_string(match.group(1 if i == 0 else 2))
-            if _is_numeric(num_str):
-                value = int(num_str)
-                unit_str = match.group(2 if i == 0 else 3)
-                direction = match.group(3 if i == 0 else 1)
-            else:
-                continue
-        else:  # Pattern 3
-            value = int(match.group(1))
-            unit_str = match.group(2)
-            direction = match.group(3) or 'from now'
+    if part_of_day not in time_windows:
+        return f"Invalid part_of_day. Use 'morning', 'afternoon', or 'evening'."
 
-        # Normalize unit for timedelta
-        if unit_str.startswith('h'): unit = 'hours'
-        elif unit_str.startswith('m'): unit = 'minutes'
-        else: unit = 'seconds'
+    start_time_str, end_time_str = time_windows[part_of_day]
+    date_str = base_date.strftime('%d-%m-%Y')
 
-        return value, unit, (direction.lower() if direction else 'from now')
+    return {
+        "start_time": f"{date_str} {start_time_str}",
+        "end_time": f"{date_str} {end_time_str}"
+    }
 
-    return None
+def _get_date_with_offset_for_testing(offset: int, unit: str):
+    """Internal helper for generating dates for test examples."""
+    # This is a simplified version for demonstration within this script.
+    # In a real MCP server, this would be a call to the process_date tool.
+    from dateutil.relativedelta import relativedelta
+    today = datetime.date.today()
+    delta = relativedelta(**{unit: offset})
+    return (today + delta).strftime("%d-%m-%Y")
 
-# --- Main Calculation Function ---
-def calculate_time(query):
-    """Calculates a new time based on a natural language query"""
-    parsed_query = _parse_time_query(query)
-    if not parsed_query:
-        return "Invalid query format. Please use a valid format."
-
-    value, unit, direction = parsed_query
-    now = datetime.datetime.now()
-    delta = datetime.timedelta(**{unit: value})
-
-    if direction in ['ago', 'before', 'last', 'back']:
-        new_time = now - delta
-    else:  # from now, after, next, in
-        new_time = now + delta
-
-    return new_time.strftime("%H:%M:%S")
-
-# --- Example Usage ---
-if __name__ == "__main__":
-    print(f"Current time: {datetime.datetime.now().strftime('%H:%M:%S')}")
-    queries = [
-        "What time will it be 2 hrs from now?",
-        "What was the time 1 hr ago?",
-        "In 10 minutes what will be the time?",
-        "What was the time 5 mins back?",
-        "After 10 seconds what is the time going to be?",
-        "What was the time 10secs back?",
-        "What is the time after a couple of hours?",
-        "In a minute, what will the time be?",
-        "Time before 1 second",
-        "Tell me the time a minute ago",
-        "Invalid query"
-    ]
-
-    for q in queries:
-        print(f"Query: '{q}' -> Result: {calculate_time(q)}")
+if __name__ == '__main__':
+    print("--- Time Tool Examples (20 Test Cases) ---")
+    
+    # Basic current time and simple offsets
+    print(f"1. Current time: {get_current_time()}")
+    print(f"2. Time in 30 seconds: {get_time_with_offset(30, 'seconds')}")
+    print(f"3. Time 45 minutes ago: {get_time_with_offset(-45, 'minutes')}")
+    print(f"4. Time in 3 hours: {get_time_with_offset(3, 'hours')}")
+    print(f"5. Time 24 hours ago (yesterday this time): {get_time_with_offset(-24, 'hours')}")
+    
+    # Time ranges for different parts of today
+    print(f"6. Time range for this morning: {get_time_range_for_day_part('morning')}")
+    print(f"7. Time range for this afternoon: {get_time_range_for_day_part('afternoon')}")
+    print(f"8. Time range for this evening: {get_time_range_for_day_part('evening')}")
+    
+    # Time ranges for other days
+    tomorrow_date = _get_date_with_offset_for_testing(1, 'days')
+    print(f"9. Time range for tomorrow morning: {get_time_range_for_day_part('morning', base_date_str=tomorrow_date)}")
+    yesterday_date = _get_date_with_offset_for_testing(-1, 'days')
+    print(f"10. Time range for yesterday afternoon: {get_time_range_for_day_part('afternoon', base_date_str=yesterday_date)}")
+    print(f"11. Time range for yesterday evening: {get_time_range_for_day_part('evening', base_date_str=yesterday_date)}")
+    
+    # Time calculations from specific datetime strings
+    base_dt_str = '01-10-2025 10:00:00'
+    print(f"12. Time 90 mins from {base_dt_str}: {get_time_with_offset(90, 'minutes', base_datetime_str=base_dt_str)}")
+    print(f"13. Time 2 hours before {base_dt_str}: {get_time_with_offset(-2, 'hours', base_datetime_str=base_dt_str)}")
+    
+    # More time offset examples
+    print(f"14. Time 10 seconds ago: {get_time_with_offset(-10, 'seconds')}")
+    print(f"15. Time 180 minutes ago: {get_time_with_offset(-180, 'minutes')}")
+    print(f"16. Time in 4 hours (from now): {get_time_with_offset(4, 'hours')}")
+    print(f"17. Time 5 minutes from now: {get_time_with_offset(5, 'minutes')}")
+    print(f"18. Time 12 hours ago: {get_time_with_offset(-12, 'hours')}")
+    
+    # Chaining examples
+    yesterday_afternoon = get_time_range_for_day_part('afternoon', base_date_str=yesterday_date)
+    print(f"19. 30 mins into yesterday afternoon: {get_time_with_offset(30, 'minutes', base_datetime_str=yesterday_afternoon['start_time'])}")
+    print(f"20. 1 hour before yesterday evening starts: {get_time_with_offset(-1, 'hours', base_datetime_str=get_time_range_for_day_part('evening', base_date_str=yesterday_date)['start_time'])}")
