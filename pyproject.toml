@@ -5,8 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "chromadb>=1.0.15",
     "dateparser>=1.2.2",
+    "langchain>=0.3.26",
+    "langchain-core>=0.3.69",
+    "langchain-text-splitters>=0.3.8",
     "llama-cpp-python>=0.3.13",
+    "numpy>=2.3.1",
     "openai>=1.97.0",
-    "python-dateutil>=2.9.0.post0",
+    "tqdm>=4.67.1",
 ]
