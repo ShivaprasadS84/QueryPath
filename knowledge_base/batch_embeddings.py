@@ -48,7 +48,7 @@ class BatchEmbeddingProcessor:
             logger.error(f"Failed to connect to nomic-embed model: {e}")
             raise
     
-    def process_large_dataset(self, data_path: str, collection_name: str = "oncology_snomed_large"):
+    def process_large_dataset(self, data_path: str, collection_name: str = "snomed_new_batch_embeddings"):
         """Process large oncology dataset with optimized batching"""
         
         # Load data
@@ -211,37 +211,24 @@ class BatchEmbeddingProcessor:
 def main():
     """Main function for batch processing"""
     
-    # Configuration
+    # Configuration - using relative paths
     BASE_URL = "http://localhost:8081/v1"  # nomic-embed API endpoint
     
-    # Choose dataset
-    datasets = {
-        "small": r"c:\Users\320262498\OneDrive - Philips\Documents\Personal_Data\Philips_Hackathon\ai_hackathon_july2025_the_queryous_minds\QueryPath\knowledge_base\oncology_snomed_first10.json",
-        "large": r"c:\Users\320262498\OneDrive - Philips\Documents\Personal_Data\Philips_Hackathon\ai_hackathon_july2025_the_queryous_minds\QueryPath\knowledge_base\oncology_snomed_first3000.json"
-    }
+    # Use the new SNOMED data source
+    data_path = os.path.join(os.path.dirname(__file__), "snomed_new.json")
+    collection_name = "snomed_new_batch_embeddings"
     
-    print("📊 Available datasets:")
-    for name, path in datasets.items():
-        if os.path.exists(path):
-            with open(path, 'r') as f:
-                data = json.load(f)
-            print(f"  {name}: {path} ({len(data)} concepts)")
-        else:
-            print(f"  {name}: {path} (NOT FOUND)")
-    
-    dataset_choice = input("\nChoose dataset (small/large): ").strip().lower()
-    
-    if dataset_choice not in datasets:
-        print("❌ Invalid choice")
-        return
-    
-    data_path = datasets[dataset_choice]
+    print("📊 SNOMED CT Dataset Processing")
     
     if not os.path.exists(data_path):
         print(f"❌ Dataset file not found: {data_path}")
         return
     
-    collection_name = f"oncology_snomed_{dataset_choice}"
+    # Check dataset size
+    with open(data_path, 'r') as f:
+        data = json.load(f)
+    print(f"📄 Dataset: {data_path} ({len(data)} concepts)")
+    print(f"📊 Collection: {collection_name}")
     
     try:
         # Initialize processor

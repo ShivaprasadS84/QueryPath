@@ -1,7 +1,7 @@
 import json
 import os
 from create_embeddings import create_chromadb_collection, load_oncology_data
-from rag_query import OncologyRAGSystem
+from rag_query import SnomedRAGSystem
 import urllib3
 
 # Disable ChromaDB telemetry and SSL warnings
@@ -12,12 +12,12 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def test_system():
     """Test the RAG system with sample queries"""
     
-    # Configuration
-    DATA_PATH = r"c:\Users\320262498\OneDrive - Philips\Documents\Personal_Data\Philips_Hackathon\ai_hackathon_july2025_the_queryous_minds\QueryPath\knowledge_base\oncology_snomed_first10.json"
+    # Configuration - using relative paths
+    DATA_PATH = os.path.join(os.path.dirname(__file__), "snomed_new.json")
     BASE_URL = "http://localhost:8081/v1"  # nomic-embed API endpoint
-    COLLECTION_NAME = "oncology_snomed_test"
+    COLLECTION_NAME = "snomed_new_test"
     
-    print("🧪 Testing Oncology RAG System")
+    print("🧪 Testing SNOMED CT RAG System")
     print("=" * 50)
     
     # Check if files exist
@@ -42,7 +42,7 @@ def test_system():
         
         # Initialize RAG system
         print(f"\n🔄 Initializing RAG system...")
-        rag_system = OncologyRAGSystem(BASE_URL, COLLECTION_NAME)
+        rag_system = SnomedRAGSystem(BASE_URL, COLLECTION_NAME)
         
         # Test queries
         test_queries = [

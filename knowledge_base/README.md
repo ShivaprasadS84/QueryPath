@@ -1,6 +1,6 @@
-# Oncology SNOMED CT RAG System
+# SNOMED CT RAG System
 
-A comprehensive Retrieval-Augmented Generation (RAG) system for oncology SNOMED CT terms using RecursiveJsonSplitter, nomic-embed embeddings, and ChromaDB.
+A comprehensive Retrieval-Augmented Generation (RAG) system for SNOMED CT terms using RecursiveJsonSplitter, nomic-embed embeddings, and ChromaDB.
 
 ## 🏗️ Architecture
 
@@ -33,7 +33,7 @@ python create_embeddings.py
 ```
 
 This will:
-- Load oncology SNOMED data from `oncology_snomed_first10.json`
+- Load SNOMED CT data from `snomed_new.json`
 - Split JSON data using RecursiveJsonSplitter
 - Generate embeddings using GIST-Large model
 - Store in ChromaDB with metadata preservation
@@ -53,7 +53,7 @@ BASE_URL = "http://localhost:8081/v1"  # nomic-embed API endpoint
 
 ### Data Path
 ```python
-DATA_PATH = r"c:\Users\320087881\Personal\QueryPath\knowledge_base\oncology_snomed_first10.json"
+DATA_PATH = os.path.join(os.path.dirname(__file__), "snomed_new.json")
 ```
 
 ## 📊 Features
@@ -121,10 +121,10 @@ DATA_PATH = r"c:\Users\320087881\Personal\QueryPath\knowledge_base\oncology_snom
 
 ### Programmatic Usage
 ```python
-from rag_query import OncologyRAGSystem
+from rag_query import SnomedRAGSystem
 
 # Initialize system
-rag = OncologyRAGSystem(base_url="http://localhost:8081/v1", collection_name="oncology_snomed")
+rag = SnomedRAGSystem(base_url="http://localhost:8081/v1", collection_name="snomed_new_embeddings")
 
 # Search for similar terms
 results = rag.search_similar_terms("lung cancer", top_k=5)

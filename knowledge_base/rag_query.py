@@ -28,10 +28,10 @@ class SearchResult:
     is_alias: bool = False
     alias_index: int = None
 
-class OncologyRAGSystem:
-    """RAG system for oncology SNOMED CT queries"""
+class SnomedRAGSystem:
+    """RAG system for SNOMED CT queries"""
     
-    def __init__(self, base_url: str = "http://localhost:8081/v1", collection_name: str = "oncology_snomed_large", db_path: str = "./chroma_db"):
+    def __init__(self, base_url: str = "http://localhost:8081/v1", collection_name: str = "snomed_new_batch_embeddings", db_path: str = "./chroma_db"):
         self.base_url = base_url
         self.collection_name = collection_name
         self.db_path = db_path
@@ -212,7 +212,7 @@ class OncologyRAGSystem:
                     results = self.search_by_concept_id(concept_id)
                 else:
                     print(f"\n🔍 Searching for: '{query}'")
-                    results = self.search_similar_terms(query, top_k=1)
+                    results = self.search_similar_terms(query, top_k=5)
                 
                 # Display results
                 print(self.format_results(results))
@@ -227,14 +227,14 @@ class OncologyRAGSystem:
 def main():
     """Main function"""
     
-    # Configuration
+    # Configuration - using new collection name
     BASE_URL = "http://localhost:8081/v1"  # nomic-embed API endpoint
-    COLLECTION_NAME = "oncology_snomed_large"
-    DB_PATH = "./chroma_db"
+    COLLECTION_NAME = "snomed_new_batch_embeddings"
+    DB_PATH = os.path.join(os.path.dirname(__file__), "chroma_db")
     
     try:
         # Initialize RAG system
-        rag_system = OncologyRAGSystem(
+        rag_system = SnomedRAGSystem(
             base_url=BASE_URL,
             collection_name=COLLECTION_NAME,
             db_path=DB_PATH

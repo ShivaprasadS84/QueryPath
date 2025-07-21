@@ -13,7 +13,7 @@ import sys
 
 # Add knowledge_base directory to path for RAG imports
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'knowledge_base'))
-from rag_query import OncologyRAGSystem
+from rag_query import SnomedRAGSystem
 
 def load_grammar():
     """Load GBNF grammar for structured output"""
@@ -203,10 +203,14 @@ class PatientInfoClient:
         
         # Initialize RAG system for diagnosis lookup
         try:
-            self.rag_system = OncologyRAGSystem(
+            # Calculate correct path to knowledge_base/chroma_db
+            knowledge_base_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'knowledge_base')
+            chroma_db_path = os.path.join(knowledge_base_path, 'chroma_db')
+            
+            self.rag_system = SnomedRAGSystem(
                 base_url="http://localhost:8081/v1",  # nomic-embed API endpoint
-                collection_name="oncology_snomed_large",
-                db_path="../../chroma_db"
+                collection_name="snomed_new_batch_embeddings",
+                db_path=chroma_db_path
             )
             print("RAG system initialized successfully")
         except Exception as e:

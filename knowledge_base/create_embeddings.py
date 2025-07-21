@@ -159,7 +159,7 @@ def prepare_documents_for_embedding(data: Dict[str, List[str]]) -> List[Dict[str
     
     return documents
 
-def create_chromadb_collection(data_path: str, base_url: str = "http://localhost:8081/v1", collection_name: str = "oncology_snomed"):
+def create_chromadb_collection(data_path: str, base_url: str = "http://localhost:8081/v1", collection_name: str = "snomed_new_embeddings"):
     """Create ChromaDB collection with embeddings"""
     
     # Initialize ChromaDB client
@@ -235,19 +235,24 @@ def create_chromadb_collection(data_path: str, base_url: str = "http://localhost
     return collection
 
 if __name__ == "__main__":
-    # Configuration
-    DATA_PATH = os.path.join(os.path.dirname(__file__), "oncology_snomed_first3000.json")
+    # Configuration - using relative paths
+    DATA_PATH = os.path.join(os.path.dirname(__file__), "snomed_new.json")
     BASE_URL = "http://localhost:8081/v1"  # nomic-embed API endpoint
-    COLLECTION_NAME = "oncology_snomed_test"
+    COLLECTION_NAME = "snomed_new_embeddings"  # ChromaDB collection name
+    
+    logger.info("🚀 Starting SNOMED CT embedding creation...")
+    logger.info(f"📁 Data path: {DATA_PATH}")
+    logger.info(f"🌐 API endpoint: {BASE_URL}")
+    logger.info(f"📊 Collection: {COLLECTION_NAME}")
     
     try:
-        # Create the collection
-        collection = create_chromadb_collection(DATA_PATH, BASE_URL, COLLECTION_NAME)
-        print(f"\n✅ Successfully created ChromaDB collection with {collection.count()} documents")
-        print(f"📊 Collection name: {COLLECTION_NAME}")
-        print(f"🔍 Ready for similarity search!")
-        print(f"🌐 Using nomic-embed model at: {BASE_URL}")
-        
+        create_chromadb_collection(
+            data_path=DATA_PATH,
+            base_url=BASE_URL,
+            collection_name=COLLECTION_NAME
+        )
+        logger.info("✅ Embedding creation completed successfully!")
     except Exception as e:
-        logger.error(f"Error creating collection: {e}")
-        raise
+        logger.error(f"❌ Embedding creation failed: {e}")
+        import traceback
+        traceback.print_exc()
