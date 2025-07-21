@@ -29,19 +29,22 @@ def test_date_parser_integration():
         print(f"\nInput: '{case}'")
         result = parser.parse_date_expression(case)
         
-        # Simulate the patient_client processing
+        # Simulate the patient_client processing (extract only date part)
         if result and result.get('type') in ['date_range', 'single_date']:
             if result.get('type') == 'single_date' and 'date' in result:
-                # Handle single date case
+                # Handle single date case - extract only date part (YYYY-MM-DD)
+                date_only = result['date'].split('T')[0]
                 timeframe = {
-                    "date": result['date']
+                    "date": date_only
                 }
                 print(f"Output: {json.dumps(timeframe, indent=2)}")
             elif result.get('type') == 'date_range' and 'start_date' in result and 'end_date' in result:
-                # Handle date range case
+                # Handle date range case - extract only date parts (YYYY-MM-DD)
+                start_date_only = result['start_date'].split('T')[0]
+                end_date_only = result['end_date'].split('T')[0]
                 timeframe = {
-                    "start_date": result['start_date'],
-                    "end_date": result['end_date']
+                    "start_date": start_date_only,
+                    "end_date": end_date_only
                 }
                 print(f"Output: {json.dumps(timeframe, indent=2)}")
             else:

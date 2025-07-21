@@ -246,16 +246,19 @@ class PatientInfoClient:
                 # Check if we got a valid date result
                 if date_result and date_result.get('type') in ['date_range', 'single_date']:
                     if date_result.get('type') == 'single_date' and 'date' in date_result:
-                        # Handle single date case - keep full timestamp as per expected format
+                        # Handle single date case - extract only date part (YYYY-MM-DD)
+                        date_only = date_result['date'].split('T')[0]
                         parsed_json['timeframe'] = {
-                            "date": date_result['date']
+                            "date": date_only
                         }
                         print(f"Converted timeframe to single date: {parsed_json['timeframe']}")
                     elif date_result.get('type') == 'date_range' and 'start_date' in date_result and 'end_date' in date_result:
-                        # Handle date range case - keep full timestamp as per expected format
+                        # Handle date range case - extract only date parts (YYYY-MM-DD)
+                        start_date_only = date_result['start_date'].split('T')[0]
+                        end_date_only = date_result['end_date'].split('T')[0]
                         parsed_json['timeframe'] = {
-                            "start_date": date_result['start_date'],
-                            "end_date": date_result['end_date']
+                            "start_date": start_date_only,
+                            "end_date": end_date_only
                         }
                         print(f"Converted timeframe to date range: {parsed_json['timeframe']}")
                     else:
