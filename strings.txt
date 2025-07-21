@@ -1,0 +1,60 @@
+"Show me all female patients under 25 diagnosed with squamous cell carcinoma in the past two months.",
+"Fetch cases of males over 50 diagnosed with prostate adenocarcinoma last year.",
+"Give me all cases with lymphoma in females aged between 30 and 40 from the last six weeks.",
+"Retrieve pathology reports for male patients diagnosed with melanoma during the first quarter of this year.",
+"List cases from the past 10 days involving breast carcinoma in women above 45.",
+"Get all male patients under 18 who were diagnosed with leukemia last month.",
+"Find reports of colon adenocarcinoma in females aged 60 and above submitted in the last three days.",
+"I want cases diagnosed with renal cell carcinoma in males in their 30s from the previous week.",
+"Show all patients over 70, both male and female, with a diagnosis of non-Hodgkin's lymphoma within the last 90 days.",
+"Pull up all female patients between 20 and 35 diagnosed with cervical dysplasia during June.",
+"Display all pathology results for male patients with glioblastoma multiforme diagnosed in the last six months, regardless of age.",
+"Provide a list of all female patients aged 55 to 65 with ovarian carcinoma diagnoses from the past year.",
+"Retrieve all biopsies showing basal cell carcinoma in patients of any gender under 30 within the last month.",
+"I need all cases of thyroid papillary carcinoma in females aged 20-40 diagnosed in the last two weeks.",
+"Show me reports of pancreatic adenocarcinoma in male patients aged 40-60 from the current quarter.",
+"List all diagnoses of chronic lymphocytic leukemia in male patients over 65 from the last 90 days.",
+"Find all instances of endometrial hyperplasia in females over 45 reported in the last five days.",
+"Get me all cases of hepatocellular carcinoma in male patients over 50 from the previous two months.",
+"Display all reports of acute myeloid leukemia in children (under 12) of either gender from the last quarter.",
+"Pull up all female patients aged 25-45 with fibroadenoma diagnoses from the last six months.",
+"Show all male patients aged 18-25 diagnosed with testicular germ cell tumors in the last year.",
+"Retrieve all pathology reports for patients over 70, both genders, with pulmonary adenocarcinoma diagnosed in the past 180 days.",
+"List cases of squamous cell carcinoma of the lung in males over 50 from the last three months.",
+"Find all diagnoses of multiple myeloma in patients over 60, regardless of gender, from the last year.",
+"Get me reports of benign prostatic hyperplasia in males over 40 from the last month.",
+"Display all cases of inflammatory bowel disease (Crohn's or Ulcerative Colitis) in patients under 30, both genders, from the past six weeks.",
+"Show all female patients with atypical ductal hyperplasia diagnosed in the last three months, regardless of age.",
+"Pull up all male patients under 30 diagnosed with Hodgkin lymphoma within the last year.",
+"Retrieve all biopsy results for skin lesions showing actinic keratosis in patients over 50 from the last two months.",
+"I want cases of high-grade serous carcinoma of the ovary in females over 50 from the previous six weeks.",
+"List all diagnoses of soft tissue sarcoma in patients aged 10-30, both genders, from the last 90 days.",
+"Find reports of gastric adenocarcinoma in male patients over 55 submitted in the last month.",
+"Get all female patients aged 30-50 diagnosed with uterine leiomyomas in the last year.",
+"Show all male patients over 60 with bladder transitional cell carcinoma diagnosed in the last six months.",
+"Display all cases of acute lymphoblastic leukemia in children (under 15) from the last quarter, regardless of gender.",
+"Pull up all female patients between 40 and 60 diagnosed with lobular carcinoma in situ from the previous year.",
+"Retrieve all pathology reports for male patients with renal masses showing oncocytoma in the last two months.",
+"List cases of esophageal adenocarcinoma in males over 40 from the last 90 days.",
+"Find all diagnoses of primary peritoneal carcinoma in females over 60 from the last year.",
+"Get me reports of salivary gland mucoepidermoid carcinoma in patients of any age or gender from the last six months.",
+"Show all female patients under 20 diagnosed with rhabdomyosarcoma in the last year.",
+"Display all cases of meningioma in female patients over 50 from the last two years.",
+"Pull up all male patients aged 20-40 with seminoma diagnoses from the last six months.",
+"Retrieve all prostate biopsies showing prostatic intraepithelial neoplasia (PIN) in males over 50 from the previous month.",
+"I want cases of vulvar squamous cell carcinoma in females over 60 from the last 90 days.",
+"List all diagnoses of neuroendocrine tumors of the lung in patients over 40, both genders, from the last year.",
+"Find reports of follicular lymphoma in patients over 50, regardless of gender, submitted in the last six months.",
+"Get all female patients aged 25-45 diagnosed with gestational trophoblastic disease in the last year.",
+"Show all male patients under 15 with medulloblastoma diagnoses from the last two years.",
+"Display all cases of ductal carcinoma in situ (DCIS) in female patients over 40 from the last 90 days."
+"Show me all female patients diagnosed with invasive ductal carcinoma yesterday."
+"Retrieve pathology reports for male patients with hepatoblastoma diagnosed today."
+"Pull up all cases of gastric lymphoma in patients over 60 from Friday last week."
+"Display all biopsy results for female patients under 30 showing dysgerminoma from the 4th of July this year."
+"List all male patients aged 50-70 diagnosed with squamous cell carcinoma on the 1st of this month."
+"Get me reports of pancreatic neuroendocrine tumors in patients diagnosed last Monday."
+"Find all diagnoses of cholangiocarcinoma in both male and female patients from January 15th this year."
+"Show all pathology reports for pediatric patients (under 12) with Wilms tumor from the second Friday of last month."
+"Retrieve all cases of astrocytoma in male patients reported on the last day of the previous quarter."
+"Display all pathology reports showing invasive lobular carcinoma from today, regardless of gender."
