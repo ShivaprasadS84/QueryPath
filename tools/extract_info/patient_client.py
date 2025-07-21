@@ -8,6 +8,7 @@ import json
 import os
 import time
 from openai import OpenAI
+from no_llm_dateparser import ComplexDateParser
 
 def load_grammar():
     """Load GBNF grammar for structured output"""
@@ -193,6 +194,7 @@ class PatientInfoClient:
         )
         self.grammar = load_grammar()
         self.system_prompt = get_system_prompt()
+        self.date_parser = ComplexDateParser()
     
     def parse_query(self, user_query):
         """Parse a natural language patient query into structured JSON"""
@@ -232,6 +234,35 @@ class PatientInfoClient:
         try:
             # Parse the JSON response
             parsed_json = json.loads(llm_response)
+            
+            # Process timeframe if present
+            if parsed_json and 'timeframe' in parsed_json and parsed_json['timeframe']:
+                timeframe_text = parsed_json['timeframe']
+                print(f"Processing timeframe: {timeframe_text}")
+                
+                # Parse the timeframe using the date parser
+                date_result = self.date_parser.parse_date_expression(timeframe_text)
+                
+                # Check if we got a valid date result
+                if date_result and date_result.get('type') in ['date_range', 'single_date']:
+                    if date_result.get('type') == 'single_date' and 'date' in date_result:
+                        # Handle single date case - keep full timestamp as per expected format
+                        parsed_json['timeframe'] = {
+                            "date": date_result['date']
+                        }
+                        print(f"Converted timeframe to single date: {parsed_json['timeframe']}")
+                    elif date_result.get('type') == 'date_range' and 'start_date' in date_result and 'end_date' in date_result:
+                        # Handle date range case - keep full timestamp as per expected format
+                        parsed_json['timeframe'] = {
+                            "start_date": date_result['start_date'],
+                            "end_date": date_result['end_date']
+                        }
+                        print(f"Converted timeframe to date range: {parsed_json['timeframe']}")
+                    else:
+                        print(f"Date parser result doesn't contain expected date fields: {date_result}")
+                else:
+                    print(f"Could not parse timeframe '{timeframe_text}': {date_result}")
+            
             return parsed_json
         except json.JSONDecodeError as e:
             print(f"JSON parsing failed: {e}")

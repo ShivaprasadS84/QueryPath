@@ -348,6 +348,42 @@ class ComplexDateParser:
                 except ValueError:
                     pass
 
+        # Pattern: "10th of November" (without year specification)
+        match = re.search(r'(\d{1,2})(st|nd|rd|th)?\s+of\s+(\w+)', text)
+        if match:
+            day = int(match.group(1))
+            month_name = match.group(3)
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    specific_date = datetime(self.reference_date.year, month, day)
+                    return {
+                        "type": "single_date",
+                        "date_type": "specific",
+                        "original_text": match.group(0),
+                        **SingleDate(specific_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        # Pattern: "November 10" (month day format)
+        match = re.search(r'(\w+)\s+(\d{1,2})(?![a-z])', text)
+        if match:
+            month_name = match.group(1)
+            day = int(match.group(2))
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    specific_date = datetime(self.reference_date.year, month, day)
+                    return {
+                        "type": "single_date",
+                        "date_type": "specific",
+                        "original_text": match.group(0),
+                        **SingleDate(specific_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
         return None
 
     def _parse_date_ranges(self, text: str) -> Optional[Dict]:
@@ -840,6 +876,145 @@ class ComplexDateParser:
                 }
             except ValueError:
                 pass
+
+        # "10th of November" (without year specification - assumes current year)
+        match = re.search(r'(\d{1,2})(st|nd|rd|th)?\s+of\s+(\w+)(?!\s+(?:this|last)\s+(?:year|month))', text)
+        if match:
+            day = int(match.group(1))
+            month_name = match.group(3)
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    specific_date = datetime(self.reference_date.year, month, day)
+                    return {
+                        "type": "single_date",
+                        "date_type": "specific",
+                        "original_text": match.group(0),
+                        **SingleDate(specific_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        # "on 10th November" or "on November 10"
+        match = re.search(r'on\s+(\d{1,2})(st|nd|rd|th)?\s+(\w+)', text)
+        if match:
+            day = int(match.group(1))
+            month_name = match.group(3)
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    specific_date = datetime(self.reference_date.year, month, day)
+                    return {
+                        "type": "single_date",
+                        "date_type": "specific",
+                        "original_text": match.group(0),
+                        **SingleDate(specific_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        match = re.search(r'on\s+(\w+)\s+(\d{1,2})(st|nd|rd|th)?', text)
+        if match:
+            month_name = match.group(1)
+            day = int(match.group(2))
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    specific_date = datetime(self.reference_date.year, month, day)
+                    return {
+                        "type": "single_date",
+                        "date_type": "specific",
+                        "original_text": match.group(0),
+                        **SingleDate(specific_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        # "from 10th July" or "since 10 July" (date range from that date to now)
+        match = re.search(r'(?:from|since)\s+(\d{1,2})(st|nd|rd|th)?\s+(\w+)', text)
+        if match:
+            day = int(match.group(1))
+            month_name = match.group(3)
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    start_date = datetime(self.reference_date.year, month, day, 0, 0, 0, 0)
+                    # If the date is in the future, assume it's from last year
+                    if start_date > self.reference_date:
+                        start_date = datetime(self.reference_date.year - 1, month, day, 0, 0, 0, 0)
+                    end_date = self.reference_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+                    return {
+                        "type": "date_range",
+                        "date_type": "from_date",
+                        "original_text": match.group(0),
+                        **DateRange(start_date, end_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        match = re.search(r'(?:from|since)\s+(\w+)\s+(\d{1,2})(st|nd|rd|th)?', text)
+        if match:
+            month_name = match.group(1)
+            day = int(match.group(2))
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    start_date = datetime(self.reference_date.year, month, day, 0, 0, 0, 0)
+                    # If the date is in the future, assume it's from last year
+                    if start_date > self.reference_date:
+                        start_date = datetime(self.reference_date.year - 1, month, day, 0, 0, 0, 0)
+                    end_date = self.reference_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+                    return {
+                        "type": "date_range",
+                        "date_type": "from_date",
+                        "original_text": match.group(0),
+                        **DateRange(start_date, end_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        # "July 10th onwards" or "10th July onwards"
+        match = re.search(r'(\w+)\s+(\d{1,2})(st|nd|rd|th)?\s+onwards', text)
+        if match:
+            month_name = match.group(1)
+            day = int(match.group(2))
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    start_date = datetime(self.reference_date.year, month, day, 0, 0, 0, 0)
+                    # If the date is in the future, assume it's from last year
+                    if start_date > self.reference_date:
+                        start_date = datetime(self.reference_date.year - 1, month, day, 0, 0, 0, 0)
+                    end_date = self.reference_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+                    return {
+                        "type": "date_range",
+                        "date_type": "onwards",
+                        "original_text": match.group(0),
+                        **DateRange(start_date, end_date).to_dict()
+                    }
+                except ValueError:
+                    pass
+
+        match = re.search(r'(\d{1,2})(st|nd|rd|th)?\s+(\w+)\s+onwards', text)
+        if match:
+            day = int(match.group(1))
+            month_name = match.group(3)
+            month = self._get_month_number(month_name)
+            if month:
+                try:
+                    start_date = datetime(self.reference_date.year, month, day, 0, 0, 0, 0)
+                    # If the date is in the future, assume it's from last year
+                    if start_date > self.reference_date:
+                        start_date = datetime(self.reference_date.year - 1, month, day, 0, 0, 0, 0)
+                    end_date = self.reference_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+                    return {
+                        "type": "date_range",
+                        "date_type": "onwards",
+                        "original_text": match.group(0),
+                        **DateRange(start_date, end_date).to_dict()
+                    }
+                except ValueError:
+                    pass
 
         return None
 
