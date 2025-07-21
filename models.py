@@ -1,38 +1,38 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Optional, Any
-
-class TemporalInfo(BaseModel):
-    model_config = ConfigDict(extra='allow')
-    
-    type: Optional[str] = None
-    date: Optional[Any] = None  # for single_date - can be string or date
-    start_date: Optional[Any] = None  # for date_range - can be string or date
-    end_date: Optional[Any] = None  # for date_range - can be string or date
+from typing import Optional, Any, Union
 
 class AgeInfo(BaseModel):
+    """Age information with different constraint types"""
     model_config = ConfigDict(extra='allow')
     
-    type: Optional[str] = None
-    value: Optional[Any] = None  # for exact
-    min: Optional[Any] = None  # for range/min
-    max: Optional[Any] = None  # for range/max
+    type: str  # "exact", "range", "min", "max"
+    value: Optional[int] = None  # for exact age
+    min: Optional[int] = None  # for range/min constraints
+    max: Optional[int] = None  # for range/max constraints
 
-class PatientInfo(BaseModel):
+class TimeframeInfo(BaseModel):
+    """Timeframe information - either single date or date range"""
     model_config = ConfigDict(extra='allow')
     
-    gender: Optional[Any] = None
-    age: Optional[Any] = None  # Can be AgeInfo dict or None
-    diagnosis: Optional[Any] = None
+    # For single date
+    date: Optional[str] = None  # YYYY-MM-DD format
+    
+    # For date range
+    start_date: Optional[str] = None  # YYYY-MM-DD format
+    end_date: Optional[str] = None  # YYYY-MM-DD format
 
-class ErrorInfo(BaseModel):
+class DiagnosisInfo(BaseModel):
+    """Diagnosis information with SNOMED CT mapping"""
     model_config = ConfigDict(extra='allow')
     
-    source: Optional[str] = None
-    error: Optional[str] = None
+    concept_id: str
+    primary_term: str
 
 class SearchResponse(BaseModel):
+    """Response model matching patient_client.py output format"""
     model_config = ConfigDict(extra='allow')
     
-    temporal_info: Optional[Any] = None
-    patient_info: Optional[Any] = None
-    errors: Optional[Any] = None
+    gender: Optional[str] = None  # "male", "female", or null
+    age: Optional[AgeInfo] = None  # Age constraints or null
+    diagnosis: Optional[Union[str, DiagnosisInfo]] = None  # String or structured diagnosis
+    timeframe: Optional[TimeframeInfo] = None  # Temporal information or null

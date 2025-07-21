@@ -1,14 +1,45 @@
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
+import sys
+import os
+
+# Add tools directory to path
+sys.path.append(os.path.join(os.path.dirname(__file__), 'tools', 'extract_info'))
 
 from models import SearchResponse
-from agent import UnifiedMedicalQueryClient
+from patient_client import PatientInfoClient
+from openai import OpenAI
 
 query_path_app = FastAPI(title="Medical Query API", description="Unified medical query processing API")
 
-# Initialize the medical query client
-medical_client = UnifiedMedicalQueryClient()
+# Initialize the patient info client (handles both LLM calls and embedding initialization)
+patient_client = PatientInfoClient()
+
+# Initialize both LLM clients for caching
+print("🔄 Initializing LLM clients for caching...")
+
+# Initialize patient info LLM (port 8080) with actual system prompt and medical query
+try:
+    # Use a sample medical query from strings.txt for proper initialization
+    sample_query = "Fetch cases of males over 50 diagnosed with prostate adenocarcinoma last year."
+    print(f"🔥 Warming up patient info LLM with: {sample_query}")
+    
+    # This will initialize the patient client's LLM with the actual system prompt
+    warmup_result = patient_client.parse_query(sample_query)
+    print(f"✅ Patient info LLM (port 8080) initialized and cached with actual system prompt")
+    print(f"📋 Warmup result: {warmup_result}")
+except Exception as e:
+    print(f"⚠️ Could not initialize patient info LLM: {e}")
+
+# Embedding LLM (port 8081) is already initialized by the patient_client RAG system
+if patient_client.rag_system:
+    print("✅ Embedding LLM (port 8081) initialized and cached via RAG system")
+    print(f"🔍 RAG system using collection: {patient_client.rag_system.collection_name}")
+else:
+    print("⚠️ Embedding LLM (port 8081) not available - RAG system failed to initialize")
+
+print("🚀 All LLM clients ready for fast subsequent calls")
 
 origins = [
     "https://localhost:4200",
@@ -34,31 +65,27 @@ async def search(q: str = Query(..., description="Medical query to process")):
     - "Find cases from yesterday for patients over 65"
     """
     try:
-        # Process the medical query using the unified agent
-        result = await medical_client.process_medical_query(q)
+        print(f"🔍 Processing query: {q}")
+        
+        # Process the medical query using the patient client
+        result = patient_client.parse_query(q)
         
         # Debug: Print the raw result
-        print(f"🔍 Raw agent result: {result}")
+        print(f"📋 Patient client result: {result}")
         
-        # Convert the result to match the SearchResponse model
-        response_data = {
-            "patient_info": result.get("patient_info", {}),
-        }
-        
-        # Handle temporal_info if it exists
-        if result.get("temporal_info"):
-            response_data["temporal_info"] = result["temporal_info"]
-        
-        # Add errors if they exist
-        if result.get("errors"):
-            response_data["errors"] = result["errors"]
-        
-        print(f"🔍 Response data before validation: {response_data}")
-            
-        return SearchResponse(**response_data)
+        # The result already matches our SearchResponse model structure
+        if result:
+            return SearchResponse(**result)
+        else:
+            # Return empty response if no result
+            return SearchResponse()
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing query: {str(e)}")
+        print(f"❌ Error processing query: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error processing medical query: {str(e)}"
+        )
 
 @query_path_app.get("/health")
 async def health_check():
