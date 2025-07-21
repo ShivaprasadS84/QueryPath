@@ -1,0 +1,221 @@
+{
+    "71978007": [
+      "Inadequate",
+      "Inadequate specimen",
+      "Inadequate sample"
+    ],
+    "309162003": [
+      "Normal histology findings",
+      "Normal tissue morphology",
+      "Benign histology"
+    ],
+    "302812006": [
+      "Anogenital Human Papilloma Virus infection",
+      "HPV infection",
+      "Human Papilloma Virus infection"
+    ],
+    "450595003": [
+      "Grade 1 intraepithelial neoplasia",
+      "CIN 1",
+      "Squamous intraepithelial neoplasia grade 1",
+      "Low-grade squamous intraepithelial lesion"
+    ],
+    "400049009": [
+      "Grade 2 intraepithelial neoplasia",
+      "CIN 2",
+      "Squamous intraepithelial neoplasia grade 2",
+      "High-grade squamous intraepithelial lesion"
+    ],
+    "20365006": [
+      "Grade 3 intraepithelial neoplasia",
+      "CIN 3",
+      "Squamous intraepithelial neoplasia grade III",
+      "High-grade squamous intraepithelial lesion"
+    ],
+    "51642000": [
+      "Adenocarcinoma in situ",
+      "CGIN",
+      "Glandular intraepithelial neoplasia",
+      "In situ adenocarcinoma"
+    ],
+    "28899001": [
+      "Squamous cell carcinoma",
+      "Squamous carcinoma",
+      "Squamous cell carcinoma, NOS"
+    ],
+    "35917007": [
+      "Adenocarcinoma",
+      "Adenocarcinoma, no subtype",
+      "Endocervical adenocarcinoma, usual type"
+    ],
+    "18048008": [
+      "Squamous cell carcinoma, keratinizing",
+      "Keratinizing squamous cell carcinoma"
+    ],
+    "45490001": [
+      "Squamous cell carcinoma, large cell, nonkeratinizing",
+      "Non-keratinizing squamous cell carcinoma",
+      "Large cell nonkeratinizing squamous carcinoma"
+    ],
+    "39056008": [
+      "Papillary squamous cell carcinoma",
+      "Papillary squamous carcinoma"
+    ],
+    "128634009": [
+      "Basaloid squamous cell carcinoma",
+      "Basaloid carcinoma"
+    ],
+    "89906000": [
+      "Verrucous carcinoma",
+      "Warty carcinoma",
+      "Verrucous squamous cell carcinoma"
+    ],
+    "27090000": [
+      "Transitional cell carcinoma",
+      "Squamo-transitional carcinoma",
+      "Urothelial carcinoma"
+    ],
+    "7300000": [
+      "Lymphoepithelial carcinoma",
+      "Lymphoepithelioma-like carcinoma"
+    ],
+    "63451008": [
+      "Squamous cell papilloma",
+      "Squamous papilloma"
+    ],
+    "72495009": [
+      "Mucinous adenocarcinoma",
+      "Mucinous carcinoma",
+      "Mucin-producing adenocarcinoma"
+    ],
+    "128695008": [
+      "Mucinous adenocarcinoma, endocervical type",
+      "Gastric type adenocarcinoma",
+      "Endocervical-type mucinous carcinoma"
+    ],
+    "25190001": [
+      "Adenocarcinoma, intestinal type",
+      "Intestinal type adenocarcinoma"
+    ],
+    "87737001": [
+      "Signet ring cell carcinoma",
+      "Signet ring cell adenocarcinoma"
+    ],
+    "5658009": [
+      "Adenocarcinoma in tubulovillous adenoma",
+      "Villoglandular carcinoma"
+    ],
+    "30289006": [
+      "Endometrioid carcinoma",
+      "Endometrioid adenocarcinoma"
+    ],
+    "30546008": [
+      "Clear cell adenocarcinoma",
+      "Clear cell carcinoma"
+    ],
+    "90725004": [
+      "Serous cystadenocarcinoma",
+      "Serous carcinoma",
+      "Serous adenocarcinoma"
+    ],
+    "2221008": [
+      "Mesonephroma, malignant",
+      "Mesonephric carcinoma"
+    ],
+    "128704005": [
+      "Adenocarcinoma with neuroendocrine differentiation",
+      "Mixed adenoneuroendocrine carcinoma"
+    ],
+    "59367005": [
+      "Adenosquamous carcinoma",
+      "Mixed adenosquamous carcinoma"
+    ],
+    "128630000": [
+      "Glassy cell carcinoma"
+    ],
+    "128637002": [
+      "Adenoid basal carcinoma"
+    ],
+    "11671000": [
+      "Adenoid cystic carcinoma",
+      "Cylindroma"
+    ],
+    "38549000": [
+      "Carcinoma, undifferentiated",
+      "Undifferentiated carcinoma",
+      "Anaplastic carcinoma"
+    ],
+    "81622000": [
+      "Carcinoid tumour",
+      "Neuroendocrine tumor, well-differentiated"
+    ],
+    "128658008": [
+      "Atypical carcinoid tumour",
+      "Atypical carcinoid"
+    ],
+    "74364000": [
+      "Small cell carcinoma",
+      "Small cell neuroendocrine carcinoma",
+      "Oat cell carcinoma"
+    ],
+    "128628002": [
+      "Large cell neuroendocrine carcinoma",
+      "LCNEC"
+    ],
+    "44598004": [
+      "Leiomyoma",
+      "Smooth muscle tumor, benign",
+      "Fibroid"
+    ],
+    "128748000": [
+      "Genital rhabdomyoma",
+      "Rhabdomyoma"
+    ],
+    "51549004": [
+      "Leiomyosarcoma",
+      "Smooth muscle sarcoma"
+    ],
+    "14269005": [
+      "Embryonal rhabdomyosarcoma",
+      "Rhabdomyosarcoma"
+    ],
+    "88195001": [
+      "Alveolar soft part sarcoma"
+    ],
+    "39000009": [
+      "Hemangiosarcoma",
+      "Angiosarcoma",
+      "Malignant vascular tumor"
+    ],
+    "19897006": [
+      "Malignant peripheral nerve sheath tumour",
+      "MPNST",
+      "Neurofibrosarcoma"
+    ],
+    "49430005": [
+      "Liposarcoma",
+      "Malignant lipomatous tumor"
+    ],
+    "128734000": [
+      "Undifferentiated sarcoma",
+      "Undifferentiated endocervical sarcoma"
+    ],
+    "73676002": [
+      "Peripheral neuroectodermal tumour",
+      "Ewing sarcoma",
+      "PNET"
+    ],
+    "40293003": [
+      "Adenomyoma",
+      "Benign mixed epithelial-mesenchymal tumor"
+    ],
+    "31470003": [
+      "Adenosarcoma",
+      "Müllerian adenosarcoma"
+    ],
+    "63264007": [
+      "Carcinosarcoma",
+      "Malignant mixed Müllerian tumor",
+      "MMMT"
+    ]
+  }

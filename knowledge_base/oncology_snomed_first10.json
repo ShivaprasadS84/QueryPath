@@ -1,0 +1,62 @@
+{
+    "10069009": [
+        "Giant cell tumor of bone, malignant",
+        "Malignant giant cell tumor of bone",
+        "Giant cell bone tumor, malignant",
+        "Malignant giant cell bone tumor"
+    ],
+    "1014611000000103": [
+        "Squamous cell carcinoma antigen level",
+        "SCC antigen level",
+        "Squamous cell carcinoma antigen",
+        "SCC antigen measurement"
+    ],
+    "1025781000000106": [
+        "Recurrent squamous cell carcinoma",
+        "Recurrent SCC",
+        "Squamous cell carcinoma recurrence",
+        "Recurring squamous cell carcinoma"
+    ],
+    "103682005": [
+        "Subcutaneous panniculitic T-cell lymphoma",
+        "Subcutaneous panniculitis-like T-cell lymphoma",
+        "Panniculitic T-cell lymphoma",
+        "SPTCL"
+    ],
+    "103685007": [
+        "Hepatosplenic gamma-delta cell lymphoma",
+        "Hepatosplenic T-cell lymphoma",
+        "Gamma-delta T-cell lymphoma",
+        "HSTCL"
+    ],
+    "103686008": [
+        "Intestinal T-cell lymphoma",
+        "Enteropathy-associated T-cell lymphoma",
+        "EATL",
+        "Intestinal T-cell malignancy"
+    ],
+    "103688009": [
+        "Acute myeloid leukemia with abnormal marrow eosinophils and inv(16)(p13q22) or t(16;16)(p13;q22)",
+        "AML with inv(16)",
+        "AML with t(16;16)",
+        "Acute myeloid leukemia with CBFB-MYH11"
+    ],
+    "103689001": [
+        "Acute myeloid leukemia, minimal differentiation",
+        "AML-M0",
+        "AML with minimal differentiation",
+        "Minimally differentiated acute myeloid leukemia"
+    ],
+    "103690005": [
+        "Acute myeloid leukemia without maturation",
+        "AML-M1",
+        "AML without maturation",
+        "Acute myeloblastic leukemia without maturation"
+    ],
+    "103691009": [
+        "Acute myeloid leukemia with maturation",
+        "AML-M2",
+        "AML with maturation",
+        "Acute myeloblastic leukemia with maturation"
+    ]
+}
