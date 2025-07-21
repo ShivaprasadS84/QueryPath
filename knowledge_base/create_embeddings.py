@@ -236,9 +236,9 @@ def create_chromadb_collection(data_path: str, base_url: str = "http://localhost
 
 if __name__ == "__main__":
     # Configuration
-    DATA_PATH = r"c:\Users\320087881\Personal\QueryPath\knowledge_base\oncology_snomed_first10.json"
+    DATA_PATH = os.path.join(os.path.dirname(__file__), "oncology_snomed_first3000.json")
     BASE_URL = "http://localhost:8081/v1"  # nomic-embed API endpoint
-    COLLECTION_NAME = "oncology_snomed"
+    COLLECTION_NAME = "oncology_snomed_test"
     
     try:
         # Create the collection

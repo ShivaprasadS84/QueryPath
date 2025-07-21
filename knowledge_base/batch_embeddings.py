@@ -216,8 +216,8 @@ def main():
     
     # Choose dataset
     datasets = {
-        "small": r"c:\Users\320087881\Personal\QueryPath\knowledge_base\oncology_snomed_first10.json",
-        "large": r"c:\Users\320087881\Personal\QueryPath\knowledge_base\oncology_snomed_first3000.json"
+        "small": r"c:\Users\320262498\OneDrive - Philips\Documents\Personal_Data\Philips_Hackathon\ai_hackathon_july2025_the_queryous_minds\QueryPath\knowledge_base\oncology_snomed_first10.json",
+        "large": r"c:\Users\320262498\OneDrive - Philips\Documents\Personal_Data\Philips_Hackathon\ai_hackathon_july2025_the_queryous_minds\QueryPath\knowledge_base\oncology_snomed_first3000.json"
     }
     
     print("📊 Available datasets:")

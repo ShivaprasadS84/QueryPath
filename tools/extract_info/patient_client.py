@@ -9,6 +9,11 @@ import os
 import time
 from openai import OpenAI
 from no_llm_dateparser import ComplexDateParser
+import sys
+
+# Add knowledge_base directory to path for RAG imports
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'knowledge_base'))
+from rag_query import OncologyRAGSystem
 
 def load_grammar():
     """Load GBNF grammar for structured output"""
@@ -195,6 +200,18 @@ class PatientInfoClient:
         self.grammar = load_grammar()
         self.system_prompt = get_system_prompt()
         self.date_parser = ComplexDateParser()
+        
+        # Initialize RAG system for diagnosis lookup
+        try:
+            self.rag_system = OncologyRAGSystem(
+                base_url="http://localhost:8081/v1",  # nomic-embed API endpoint
+                collection_name="oncology_snomed_large",
+                db_path="../../chroma_db"
+            )
+            print("RAG system initialized successfully")
+        except Exception as e:
+            print(f"Warning: Could not initialize RAG system: {e}")
+            self.rag_system = None
     
     def parse_query(self, user_query):
         """Parse a natural language patient query into structured JSON"""
@@ -265,6 +282,34 @@ class PatientInfoClient:
                         print(f"Date parser result doesn't contain expected date fields: {date_result}")
                 else:
                     print(f"Could not parse timeframe '{timeframe_text}': {date_result}")
+            
+            # Process diagnosis if present and RAG system is available
+            if parsed_json.get('diagnosis', None) and self.rag_system:
+                diagnosis_text = parsed_json['diagnosis']
+                print(f"Processing diagnosis: {diagnosis_text}")
+                
+                try:
+                    # Query RAG system for top 1 match
+                    search_results = self.rag_system.search_similar_terms(diagnosis_text, top_k=1)
+                    
+                    if search_results:
+                        # Get the top match
+                        top_result = search_results[0]
+                        
+                        # Replace diagnosis text with structured object
+                        parsed_json['diagnosis'] = {
+                            "concept_id": top_result.concept_id,
+                            "primary_term": top_result.primary_term
+                        }
+                        
+                        print(f"Converted diagnosis to structured format: {parsed_json['diagnosis']}")
+                        print(f"Match confidence: {top_result.similarity_score:.3f}")
+                    else:
+                        print(f"No RAG matches found for diagnosis: {diagnosis_text}")
+                        
+                except Exception as e:
+                    print(f"Error processing diagnosis with RAG system: {e}")
+                    # Keep original diagnosis text if RAG fails
             
             return parsed_json
         except json.JSONDecodeError as e:
